@@ -1,43 +1,39 @@
 import sys
 
 
+def get_last_empty_element(array: list[int], length: int) -> int:
+    for i in range(length):
+        if array[length - 1 - i] == 0:
+            return length - 1 - i
+
+    return -1
+
+
+def get_iterations_count_from_bubble_sorting_list(array: list[int], positions: list[int], length: int) -> list[int]:
+    iterations_count_list = [0] * (length + 1)
+
+    pivot = length - 1
+    right_count = 0
+    iterations_count_list[0] = 1
+    for i in range(n):
+        array[positions[i] - 1] = 1
+        if positions[i] - 1 == pivot:
+            pivot = get_last_empty_element(array=array, length=pivot)
+            right_count += positions[i] - 1 - pivot
+
+            if pivot == -1:
+                iterations_count_list[i + 1] = i + 2 - right_count
+                break
+
+        iterations_count_list[i + 1] = i + 2 - right_count
+
+    return iterations_count_list
+
+
 n = int(sys.stdin.readline())
 positions_array = list(map(int, sys.stdin.readline().split()))
 
+result_array = [0] * n
 
-def get_bubble_sort_loops_count(array: list[int]) -> int:
-    prev_one_digit_index = None
-    sub_arrays = []
-    all_numbers_same = True
-    for i in range(n):
-        if array[n - 1] != array[n - 1 - i]:
-            all_numbers_same = False
-        if all_numbers_same and array[n - 1] == 1:
-            continue
-        if array[n - 1 - i] == 1:
-            if prev_one_digit_index is not None:
-                sub_arrays.append(array[n - 1 - i:prev_one_digit_index + 1])
-            prev_one_digit_index = n - 1 - i
+print(*get_iterations_count_from_bubble_sorting_list(array=result_array, positions=positions_array, length=n))
 
-    if all_numbers_same:
-        return 1
-    sub_arrays.append(array[0: prev_one_digit_index + 1])
-
-    sub_arrays_length = len(sub_arrays)
-
-    return sub_arrays_length + 1
-
-
-binary_array = [0] * n
-result_array = [1] * (n + 1)
-
-result_array[0] = 1
-
-for index in range(n):
-    if index == n - 1:
-        continue
-    binary_array[positions_array[index] - 1] = 1
-    result_array[index + 1] = get_bubble_sort_loops_count(array=binary_array)
-
-
-print(*result_array)
