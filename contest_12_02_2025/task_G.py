@@ -1,9 +1,11 @@
-array = [1,2,3,4,5]
+def generate_anti_quicksort_test_array(length: int):
+    array = list(range(1, length + 1))
+    for i in range(1, length):
+        array[i], array[i//2] = array[i//2], array[i]
 
-print(array)
+    return array
 
-for el in reversed(array):
-    print(el)
+n = int(input())
+anti_quicksort_test_array = generate_anti_quicksort_test_array(length=n)
 
-
-print(array)
+print(*anti_quicksort_test_array)

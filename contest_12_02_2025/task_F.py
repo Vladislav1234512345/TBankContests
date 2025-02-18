@@ -1,10 +1,7 @@
 import sys
 
-
-inversions_count = 0
-
-
-def merge(arr: list[int], left: int, mid: int, right: int) -> None:
+def merge(arr: list[int], left: int, mid: int, right: int) -> int:
+    inversions_count = 0
     n1 = mid - left + 1
     n2 = right - mid
 
@@ -26,8 +23,7 @@ def merge(arr: list[int], left: int, mid: int, right: int) -> None:
             i += 1
         else:
             arr[k] = right_array[j]
-            global inversions_count
-            inversions_count += 1
+            inversions_count += len(left_array) - i
             j += 1
         k += 1
 
@@ -41,19 +37,23 @@ def merge(arr: list[int], left: int, mid: int, right: int) -> None:
         j += 1
         k += 1
 
+    return inversions_count
 
-def merge_sort(arr: list[int], left: int, right: int) -> None:
+
+def merge_sort(arr: list[int], left: int, right: int) -> int:
+    inversions_count = 0
     if left < right:
-        mid = (left + right) // 2
+        mid = left + (right - left) // 2
 
-        merge_sort(arr=arr, left=left, right=mid)
-        merge_sort(arr=arr, left=mid + 1, right=right)
-        merge(arr=arr, left=left, mid=mid, right=right)
+        inversions_count += merge_sort(arr=arr, left=left, right=mid)
+        inversions_count += merge_sort(arr=arr, left=mid + 1, right=right)
+        inversions_count += merge(arr=arr, left=left, mid=mid, right=right)
+
+    return inversions_count
 
 
 if __name__ == "__main__":
     n = int(sys.stdin.readline())
     numbers = list(map(int, sys.stdin.readline().split()))
-    merge_sort(arr=numbers, left=0, right=n-1)
-    print(inversions_count)
+    print(merge_sort(arr=numbers, left=0, right=n-1))
     print(*numbers)
