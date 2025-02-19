@@ -36,4 +36,3 @@ positions_array = list(map(int, sys.stdin.readline().split()))
 result_array = [0] * n
 
 print(*get_iterations_count_from_bubble_sorting_list(array=result_array, positions=positions_array, length=n))
-

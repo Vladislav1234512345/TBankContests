@@ -72,3 +72,5 @@ tables = [tuple(map(int, sys.stdin.readline().split())) for _ in range(queries_c
 
 for table in tables:
     print(split_table(rows=table[0], columns=table[1]))
+
+
