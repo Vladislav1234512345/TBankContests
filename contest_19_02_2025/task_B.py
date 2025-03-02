@@ -1,34 +1,28 @@
+from collections import deque
 import sys
 
 
-def min_tuple_first_element(array: list[tuple[int, int]]) -> int:
-    print(array)
-    min_value = sys.maxsize
-    for el in array:
-        min_value = min(min_value, el[0])
-
-    return min_value
-
-
 def get_min_values_from_windows(array: list[int], length: int, step: int) -> list[int]:
-    windows_values_stack = []
+    windows_values = []
+    windows_indexes_deque = deque()
+
     for i in range(length):
-        if i % step == 0:
-            if windows_values_stack:
-                windows_values_stack.append((array[i], min(array[i], min_tuple_first_element(array=windows_values_stack[-step:]))))
-            else:
-                windows_values_stack.append((array[i], array[i]))
-        else:
-            windows_values_stack.append((array[i], min(array[i], windows_values_stack[-1][1])))
 
-    print(windows_values_stack)
-    return []
+        if windows_indexes_deque and windows_indexes_deque[0] < i - step + 1:
+            windows_indexes_deque.popleft()
+
+        while windows_indexes_deque and array[windows_indexes_deque[-1]] > array[i]:
+            windows_indexes_deque.pop()
+
+        windows_indexes_deque.append(i)
+
+        if i >= step - 1:
+            windows_values.append(array[windows_indexes_deque[0]])
+
+    return windows_values
 
 
-# n, k = list(map(int, sys.stdin.readline().split()))
-# windows_array = list(map(int, sys.stdin.readline().split()))
-
-n, k = 7, 3
-windows_array = [1, 3, 2, 4, 5, 3, 1]
+n, k = list(map(int, sys.stdin.readline().split()))
+windows_array = list(map(int, sys.stdin.readline().split()))
 
 print(*get_min_values_from_windows(array=windows_array, length=n, step=k))
